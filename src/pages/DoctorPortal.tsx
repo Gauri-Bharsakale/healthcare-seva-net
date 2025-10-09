@@ -1,0 +1,181 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { ArrowLeft, Stethoscope } from "lucide-react";
+import { Link } from "react-router-dom";
+import { toast } from "sonner";
+
+const DoctorPortal = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    specialization: "",
+    licenseId: "",
+    experience: "",
+    city: "",
+    volunteeringType: "",
+    availability: ""
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success("Registration submitted successfully! We'll review and get back to you soon.");
+  };
+
+  return (
+    <div className="min-h-screen gradient-subtle py-12">
+      <div className="container mx-auto px-4 max-w-3xl">
+        <Link to="/" className="inline-flex items-center gap-2 text-primary hover:underline mb-6">
+          <ArrowLeft className="w-4 h-4" />
+          Back to Home
+        </Link>
+
+        <Card className="shadow-soft border-border/50">
+          <CardHeader className="text-center">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+              <Stethoscope className="w-8 h-8 text-primary" />
+            </div>
+            <CardTitle className="text-3xl">Doctor Registration</CardTitle>
+            <CardDescription className="text-base">
+              Join our network of compassionate healthcare professionals making a difference
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Full Name *</Label>
+                  <Input
+                    id="name"
+                    placeholder="Dr. Your Name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email *</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="doctor@example.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Phone Number *</Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder="+91 XXXXX XXXXX"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="licenseId">Medical License ID *</Label>
+                  <Input
+                    id="licenseId"
+                    placeholder="License Number"
+                    value={formData.licenseId}
+                    onChange={(e) => setFormData({ ...formData, licenseId: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="specialization">Specialization *</Label>
+                  <Select
+                    value={formData.specialization}
+                    onValueChange={(value) => setFormData({ ...formData, specialization: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select specialization" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="general">General Physician</SelectItem>
+                      <SelectItem value="pediatrics">Pediatrics</SelectItem>
+                      <SelectItem value="gynecology">Gynecology</SelectItem>
+                      <SelectItem value="cardiology">Cardiology</SelectItem>
+                      <SelectItem value="orthopedics">Orthopedics</SelectItem>
+                      <SelectItem value="dermatology">Dermatology</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="experience">Years of Experience *</Label>
+                  <Input
+                    id="experience"
+                    type="number"
+                    placeholder="5"
+                    value={formData.experience}
+                    onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="city">City *</Label>
+                  <Input
+                    id="city"
+                    placeholder="Mumbai"
+                    value={formData.city}
+                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="volunteeringType">Volunteering Type *</Label>
+                  <Select
+                    value={formData.volunteeringType}
+                    onValueChange={(value) => setFormData({ ...formData, volunteeringType: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="free">Free Consultations</SelectItem>
+                      <SelectItem value="lowcost">Low-Cost Services</SelectItem>
+                      <SelectItem value="both">Both</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="availability">Availability & Preferred Schedule</Label>
+                <Textarea
+                  id="availability"
+                  placeholder="E.g., Weekends 10 AM - 2 PM, or specific days..."
+                  value={formData.availability}
+                  onChange={(e) => setFormData({ ...formData, availability: e.target.value })}
+                  rows={3}
+                />
+              </div>
+
+              <Button type="submit" className="w-full" size="lg">
+                Submit Registration
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default DoctorPortal;
