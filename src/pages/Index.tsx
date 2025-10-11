@@ -88,8 +88,17 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <header className="absolute top-0 left-0 right-0 z-50 py-4">
-        <div className="container mx-auto px-4 flex justify-end">
-          <LanguageToggle />
+        <div className="container mx-auto px-4 flex justify-between items-center">
+          <img src="/src/assets/logo.png" alt="SevaHealth" className="h-12" />
+          <div className="flex items-center gap-4">
+            <LanguageToggle />
+            <a 
+              href="/auth" 
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2 rounded-full font-medium shadow-soft transition-smooth"
+            >
+              Login
+            </a>
+          </div>
         </div>
       </header>
 
