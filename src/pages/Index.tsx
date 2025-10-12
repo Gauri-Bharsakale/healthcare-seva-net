@@ -6,6 +6,7 @@ import BenefitsSection from "@/components/BenefitsSection";
 import ImpactTracker from "@/components/ImpactTracker";
 import Footer from "@/components/Footer";
 import LanguageToggle from "@/components/LanguageToggle";
+import sevaLogo from "@/assets/seva-logo.png";
 
 const patientBenefits = [
   {
@@ -89,7 +90,7 @@ const Index = () => {
     <div className="min-h-screen">
       <header className="absolute top-0 left-0 right-0 z-50 py-4">
         <div className="container mx-auto px-4 flex justify-between items-center">
-          <img src="/src/assets/logo.png" alt="SevaHealth" className="h-12" />
+          <img src={sevaLogo} alt="SevaHealth" className="h-12" />
           <div className="flex items-center gap-4">
             <LanguageToggle />
             <a 
