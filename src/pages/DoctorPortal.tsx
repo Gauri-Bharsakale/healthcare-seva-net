@@ -5,9 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Stethoscope } from "lucide-react";
+import { ArrowLeft, Stethoscope, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import sevaLogo from "@/assets/seva-logo.png";
 
 const DoctorPortal = () => {
   const [formData, setFormData] = useState({
@@ -15,11 +16,14 @@ const DoctorPortal = () => {
     email: "",
     phone: "",
     specialization: "",
-    licenseId: "",
     experience: "",
     city: "",
-    volunteeringType: "",
-    availability: ""
+    state: "",
+    sevaMode: "",
+    availability: "",
+    identityProof: null as File | null,
+    medicalLicense: null as File | null,
+    profilePhoto: null as File | null
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -30,10 +34,13 @@ const DoctorPortal = () => {
   return (
     <div className="min-h-screen gradient-subtle py-12">
       <div className="container mx-auto px-4 max-w-3xl">
-        <Link to="/" className="inline-flex items-center gap-2 text-primary hover:underline mb-6">
-          <ArrowLeft className="w-4 h-4" />
-          Back to Home
-        </Link>
+        <div className="flex items-center justify-between mb-6">
+          <img src={sevaLogo} alt="SevaHealth Logo" className="h-12 w-12" />
+          <Link to="/" className="inline-flex items-center gap-2 text-primary hover:underline">
+            <ArrowLeft className="w-4 h-4" />
+            Back to Home
+          </Link>
+        </div>
 
         <Card className="shadow-soft border-border/50">
           <CardHeader className="text-center">
@@ -84,17 +91,6 @@ const DoctorPortal = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="licenseId">Medical License ID *</Label>
-                  <Input
-                    id="licenseId"
-                    placeholder="License Number"
-                    value={formData.licenseId}
-                    onChange={(e) => setFormData({ ...formData, licenseId: e.target.value })}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
                   <Label htmlFor="specialization">Specialization *</Label>
                   <Select
                     value={formData.specialization}
@@ -139,16 +135,27 @@ const DoctorPortal = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="volunteeringType">Volunteering Type *</Label>
+                  <Label htmlFor="state">State *</Label>
+                  <Input
+                    id="state"
+                    placeholder="Maharashtra"
+                    value={formData.state}
+                    onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="sevaMode">Preferred Mode *</Label>
                   <Select
-                    value={formData.volunteeringType}
-                    onValueChange={(value) => setFormData({ ...formData, volunteeringType: value })}
+                    value={formData.sevaMode}
+                    onValueChange={(value) => setFormData({ ...formData, sevaMode: value })}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select type" />
+                      <SelectValue placeholder="Select mode" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="free">Free Consultations</SelectItem>
+                      <SelectItem value="free">Free (Seva Mode)</SelectItem>
                       <SelectItem value="lowcost">Low-Cost Services</SelectItem>
                       <SelectItem value="both">Both</SelectItem>
                     </SelectContent>
@@ -157,14 +164,59 @@ const DoctorPortal = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="availability">Availability & Preferred Schedule</Label>
+                <Label htmlFor="availability">Availability Slots *</Label>
                 <Textarea
                   id="availability"
                   placeholder="E.g., Weekends 10 AM - 2 PM, or specific days..."
                   value={formData.availability}
                   onChange={(e) => setFormData({ ...formData, availability: e.target.value })}
                   rows={3}
+                  required
                 />
+              </div>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="identityProof">Identity Proof Upload (Aadhaar, PAN, or Govt ID) *</Label>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      id="identityProof"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setFormData({ ...formData, identityProof: e.target.files?.[0] || null })}
+                      required
+                    />
+                    <Upload className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="medicalLicense">Medical License Upload *</Label>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      id="medicalLicense"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setFormData({ ...formData, medicalLicense: e.target.files?.[0] || null })}
+                      required
+                    />
+                    <Upload className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">Mandatory for verification</p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="profilePhoto">Profile Photo</Label>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      id="profilePhoto"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setFormData({ ...formData, profilePhoto: e.target.files?.[0] || null })}
+                    />
+                    <Upload className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                </div>
               </div>
 
               <Button type="submit" className="w-full" size="lg">

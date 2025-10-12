@@ -3,20 +3,26 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Heart } from "lucide-react";
+import { ArrowLeft, Heart, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import sevaLogo from "@/assets/seva-logo.png";
 
 const PatientPortal = () => {
   const [formData, setFormData] = useState({
     name: "",
     age: "",
+    gender: "",
     city: "",
+    village: "",
+    state: "",
     phone: "",
-    email: "",
-    symptoms: "",
-    medicalHistory: ""
+    language: "",
+    healthIssue: "",
+    medicalReports: null as File | null,
+    prescription: null as File | null
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -27,10 +33,13 @@ const PatientPortal = () => {
   return (
     <div className="min-h-screen gradient-subtle py-12">
       <div className="container mx-auto px-4 max-w-3xl">
-        <Link to="/" className="inline-flex items-center gap-2 text-primary hover:underline mb-6">
-          <ArrowLeft className="w-4 h-4" />
-          Back to Home
-        </Link>
+        <div className="flex items-center justify-between mb-6">
+          <img src={sevaLogo} alt="SevaHealth Logo" className="h-12 w-12" />
+          <Link to="/" className="inline-flex items-center gap-2 text-primary hover:underline">
+            <ArrowLeft className="w-4 h-4" />
+            Back to Home
+          </Link>
+        </div>
 
         <Card className="shadow-soft border-border/50">
           <CardHeader className="text-center">
@@ -69,6 +78,23 @@ const PatientPortal = () => {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="gender">Gender *</Label>
+                  <Select
+                    value={formData.gender}
+                    onValueChange={(value) => setFormData({ ...formData, gender: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="city">City *</Label>
                   <Input
                     id="city"
@@ -80,7 +106,28 @@ const PatientPortal = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="phone">Mobile Number *</Label>
+                  <Label htmlFor="village">Village (Optional)</Label>
+                  <Input
+                    id="village"
+                    placeholder="Village name"
+                    value={formData.village}
+                    onChange={(e) => setFormData({ ...formData, village: e.target.value })}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="state">State *</Label>
+                  <Input
+                    id="state"
+                    placeholder="Your State"
+                    value={formData.state}
+                    onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Contact Number *</Label>
                   <Input
                     id="phone"
                     type="tel"
@@ -91,39 +138,62 @@ const PatientPortal = () => {
                   />
                 </div>
 
-                <div className="space-y-2 md:col-span-2">
-                  <Label htmlFor="email">Email (Optional)</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="your@email.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  />
+                <div className="space-y-2">
+                  <Label htmlFor="language">Language Preference *</Label>
+                  <Select
+                    value={formData.language}
+                    onValueChange={(value) => setFormData({ ...formData, language: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="english">English</SelectItem>
+                      <SelectItem value="hindi">Hindi</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="symptoms">Describe Your Symptoms or Health Concern *</Label>
+                <Label htmlFor="healthIssue">Description of Health Issue *</Label>
                 <Textarea
-                  id="symptoms"
-                  placeholder="Please describe what you're experiencing..."
-                  value={formData.symptoms}
-                  onChange={(e) => setFormData({ ...formData, symptoms: e.target.value })}
+                  id="healthIssue"
+                  placeholder="Please describe your health concern in detail..."
+                  value={formData.healthIssue}
+                  onChange={(e) => setFormData({ ...formData, healthIssue: e.target.value })}
                   rows={4}
                   required
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="medicalHistory">Any Relevant Medical History (Optional)</Label>
-                <Textarea
-                  id="medicalHistory"
-                  placeholder="Previous conditions, medications, allergies..."
-                  value={formData.medicalHistory}
-                  onChange={(e) => setFormData({ ...formData, medicalHistory: e.target.value })}
-                  rows={3}
-                />
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="medicalReports">Upload Previous Medical Reports (Images / PDFs)</Label>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      id="medicalReports"
+                      type="file"
+                      accept="image/*,application/pdf"
+                      onChange={(e) => setFormData({ ...formData, medicalReports: e.target.files?.[0] || null })}
+                    />
+                    <Upload className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">For diagnosis reference</p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="prescription">Upload Current Prescription or Doctor Note (Optional)</Label>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      id="prescription"
+                      type="file"
+                      accept="image/*,application/pdf"
+                      onChange={(e) => setFormData({ ...formData, prescription: e.target.files?.[0] || null })}
+                    />
+                    <Upload className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                </div>
               </div>
 
               <div className="bg-muted/50 p-4 rounded-lg border border-border/50">

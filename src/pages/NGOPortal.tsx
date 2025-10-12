@@ -5,9 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Building2 } from "lucide-react";
+import { ArrowLeft, Building2, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import sevaLogo from "@/assets/seva-logo.png";
 
 const NGOPortal = () => {
   const [formData, setFormData] = useState({
@@ -17,9 +18,11 @@ const NGOPortal = () => {
     phone: "",
     registrationNumber: "",
     location: "",
+    areaOfOperation: "",
     contactPerson: "",
-    contactPersonRole: "",
-    description: ""
+    contactPersonEmail: "",
+    description: "",
+    verificationDoc: null as File | null
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -30,10 +33,13 @@ const NGOPortal = () => {
   return (
     <div className="min-h-screen gradient-subtle py-12">
       <div className="container mx-auto px-4 max-w-3xl">
-        <Link to="/" className="inline-flex items-center gap-2 text-primary hover:underline mb-6">
-          <ArrowLeft className="w-4 h-4" />
-          Back to Home
-        </Link>
+        <div className="flex items-center justify-between mb-6">
+          <img src={sevaLogo} alt="SevaHealth Logo" className="h-12 w-12" />
+          <Link to="/" className="inline-flex items-center gap-2 text-primary hover:underline">
+            <ArrowLeft className="w-4 h-4" />
+            Back to Home
+          </Link>
+        </div>
 
         <Card className="shadow-soft border-border/50">
           <CardHeader className="text-center">
@@ -60,7 +66,7 @@ const NGOPortal = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="type">Organization Type *</Label>
+                  <Label htmlFor="type">NGO Type *</Label>
                   <Select
                     value={formData.type}
                     onValueChange={(value) => setFormData({ ...formData, type: value })}
@@ -69,11 +75,8 @@ const NGOPortal = () => {
                       <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="healthcare">Healthcare NGO</SelectItem>
-                      <SelectItem value="community">Community Service</SelectItem>
-                      <SelectItem value="social">Social Welfare</SelectItem>
-                      <SelectItem value="trust">Charitable Trust</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="medical">Medical</SelectItem>
+                      <SelectItem value="nonmedical">Non-Medical</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -125,6 +128,17 @@ const NGOPortal = () => {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="areaOfOperation">Area of Operation *</Label>
+                  <Input
+                    id="areaOfOperation"
+                    placeholder="Region or districts covered"
+                    value={formData.areaOfOperation}
+                    onChange={(e) => setFormData({ ...formData, areaOfOperation: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="contactPerson">Contact Person Name *</Label>
                   <Input
                     id="contactPerson"
@@ -136,26 +150,43 @@ const NGOPortal = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="contactPersonRole">Contact Person Role *</Label>
+                  <Label htmlFor="contactPersonEmail">Contact Person Email *</Label>
                   <Input
-                    id="contactPersonRole"
-                    placeholder="Director, Manager, etc."
-                    value={formData.contactPersonRole}
-                    onChange={(e) => setFormData({ ...formData, contactPersonRole: e.target.value })}
+                    id="contactPersonEmail"
+                    type="email"
+                    placeholder="contact@example.com"
+                    value={formData.contactPersonEmail}
+                    onChange={(e) => setFormData({ ...formData, contactPersonEmail: e.target.value })}
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">Organization Description</Label>
+                <Label htmlFor="description">Description of Services *</Label>
                 <Textarea
                   id="description"
-                  placeholder="Tell us about your NGO's mission and healthcare initiatives..."
+                  placeholder="Tell us about your NGO's mission, healthcare initiatives, and services offered..."
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={4}
+                  required
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="verificationDoc">Verification Documents (Certificate / Registration Proof) *</Label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    id="verificationDoc"
+                    type="file"
+                    accept="image/*,application/pdf"
+                    onChange={(e) => setFormData({ ...formData, verificationDoc: e.target.files?.[0] || null })}
+                    required
+                  />
+                  <Upload className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <p className="text-xs text-muted-foreground">Upload NGO registration certificate or proof</p>
               </div>
 
               <Button type="submit" className="w-full" size="lg">
