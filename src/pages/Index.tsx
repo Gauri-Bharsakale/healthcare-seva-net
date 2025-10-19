@@ -10,82 +10,6 @@ import sevaLogo from "@/assets/seva-logo.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 
-const patientBenefits = [
-  {
-    title: "Massive Financial Savings",
-    description: "Get free or low-cost consultations, diagnosis help, and guidance — saving thousands in medical costs."
-  },
-  {
-    title: "Access to Trusted Help",
-    description: "Avoid fake 'free camps' or hospitals with hidden charges. All services are verified and transparent."
-  },
-  {
-    title: "Simple Process, No Bureaucracy",
-    description: "One centralized platform — no long forms or running between hospitals."
-  },
-  {
-    title: "Voice & Empowerment",
-    description: "Speak directly with doctors and NGOs — feel heard and respected."
-  },
-  {
-    title: "Guidance for the Future",
-    description: "Learn how to seek help next time — builds long-term awareness and independence."
-  }
-];
-
-const ngoBenefits = [
-  {
-    title: "Data & Reporting Made Easy",
-    description: "Automatically get verified records and impact data for reports and audits."
-  },
-  {
-    title: "Easier Funding & CSR Partnerships",
-    description: "Transparency and proof of work attract more donations and CSR collaborations."
-  },
-  {
-    title: "Brand Visibility",
-    description: "Listed publicly on SevaHealth — boosts reach and national reputation."
-  },
-  {
-    title: "Ready Access to Medical Volunteers",
-    description: "Quickly find doctors for camps or virtual check-ups without manual search."
-  },
-  {
-    title: "Operational Efficiency",
-    description: "Organize drives, teleconsultations, and collaborations easily."
-  },
-  {
-    title: "Government & CSR Recognition",
-    description: "Data-backed transparency supports government or CSR registration."
-  }
-];
-
-const doctorBenefits = [
-  {
-    title: "Professional Credibility & Recognition",
-    description: "Volunteering enhances reputation and can lead to awards or government recognition."
-  },
-  {
-    title: "Portfolio / Resume Boost",
-    description: "Volunteer work improves postgraduate, fellowship, or leadership opportunities."
-  },
-  {
-    title: "Networking Opportunities",
-    description: "Connect with NGOs and other doctors for future research or social collaborations."
-  },
-  {
-    title: "Personal Branding",
-    description: "'Seva Profile' acts as a verified public portfolio, improving visibility and patient trust."
-  },
-  {
-    title: "Social & Emotional Satisfaction",
-    description: "Experience genuine inner peace and respect for contributing to society."
-  },
-  {
-    title: "Indirect Exposure & Word-of-Mouth",
-    description: "Patients who receive free help may later recommend the doctor's paid services."
-  }
-];
 
 const Index = () => {
   const { language } = useLanguage();
@@ -102,7 +26,7 @@ const Index = () => {
               href="/auth" 
               className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2 rounded-full font-medium shadow-soft transition-smooth"
             >
-              Login
+              {t.common.login}
             </a>
           </div>
         </div>
@@ -117,28 +41,28 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
-              Real Benefits for Everyone
+              {t.benefits.title}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              See how SevaHealth creates value for patients, NGOs, and doctors
+              {t.benefits.subtitle}
             </p>
           </div>
           
           <BenefitsSection 
-            title={`💙 ${t.patients.title}`}
-            benefits={patientBenefits}
+            title={t.benefits.patients.title}
+            benefits={t.benefits.patients.items}
             accentColor="bg-primary"
           />
           
           <BenefitsSection 
-            title={`🏥 ${t.ngos.title}`}
-            benefits={ngoBenefits}
+            title={t.benefits.ngos.title}
+            benefits={t.benefits.ngos.items}
             accentColor="bg-secondary"
           />
           
           <BenefitsSection 
-            title={`👨‍⚕️ ${t.doctors.title}`}
-            benefits={doctorBenefits}
+            title={t.benefits.doctors.title}
+            benefits={t.benefits.doctors.items}
             accentColor="bg-accent"
           />
         </div>

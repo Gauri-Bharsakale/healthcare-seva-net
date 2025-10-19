@@ -1,20 +1,22 @@
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/translations";
+
 const About = () => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-6">
-            About SevaHealth
+            {t.about.title}
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-            SevaHealth is a revolutionary platform dedicated to making healthcare accessible to every Indian, 
-            regardless of their economic status. We bridge the gap between medical professionals who want to 
-            give back and communities that desperately need care.
+            {t.about.paragraph1}
           </p>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Built on the foundation of <span className="text-primary font-semibold">seva</span> (selfless service), 
-            we unite doctors, NGOs, and patients in a transparent ecosystem where compassion meets technology, 
-            and where every consultation contributes to a healthier, more equitable India.
+            {t.about.paragraph2} <span className="text-primary font-semibold">{t.about.seva}</span> {t.about.sevaDescription}, {t.about.paragraph3}
           </p>
         </div>
       </div>

@@ -1,9 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/translations";
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const { language } = useLanguage();
+  const t = translations[language];
 
   return (
     <section className="relative overflow-hidden gradient-hero">
@@ -13,15 +17,15 @@ const HeroSection = () => {
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/20">
             <Heart className="w-4 h-4 text-white" />
-            <span className="text-sm text-white font-medium">Healthcare Seva for All</span>
+            <span className="text-sm text-white font-medium">{t.hero.tagline}</span>
           </div>
           
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Bridging the Gap Between <span className="text-green-soft">Those Who Can Help</span> and Those Who Need Care
+            {t.hero.title} <span className="text-green-soft">{t.hero.titleHighlight}</span> {t.hero.titleEnd}
           </h1>
           
           <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed">
-            A unified healthcare seva network connecting doctors, NGOs, and patients across India.
+            {t.hero.subtitle}
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -30,7 +34,7 @@ const HeroSection = () => {
               onClick={() => navigate('/doctor-portal')}
               className="w-full sm:w-auto"
             >
-              Join as Doctor
+              {t.hero.doctorButton}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button 
@@ -38,7 +42,7 @@ const HeroSection = () => {
               onClick={() => navigate('/ngo-portal')}
               className="w-full sm:w-auto"
             >
-              Join as NGO
+              {t.hero.ngoButton}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button 
@@ -46,7 +50,7 @@ const HeroSection = () => {
               onClick={() => navigate('/patient-portal')}
               className="w-full sm:w-auto"
             >
-              Join as Patient
+              {t.hero.patientButton}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </div>
