@@ -7,6 +7,8 @@ import ImpactTracker from "@/components/ImpactTracker";
 import Footer from "@/components/Footer";
 import LanguageToggle from "@/components/LanguageToggle";
 import sevaLogo from "@/assets/seva-logo.png";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/translations";
 
 const patientBenefits = [
   {
@@ -86,6 +88,9 @@ const doctorBenefits = [
 ];
 
 const Index = () => {
+  const { language } = useLanguage();
+  const t = translations[language];
+
   return (
     <div className="min-h-screen">
       <header className="absolute top-0 left-0 right-0 z-50 py-4">
@@ -120,19 +125,19 @@ const Index = () => {
           </div>
           
           <BenefitsSection 
-            title="💙 For Patients" 
+            title={`💙 ${t.patients.title}`}
             benefits={patientBenefits}
             accentColor="bg-primary"
           />
           
           <BenefitsSection 
-            title="🏥 For NGOs" 
+            title={`🏥 ${t.ngos.title}`}
             benefits={ngoBenefits}
             accentColor="bg-secondary"
           />
           
           <BenefitsSection 
-            title="👨‍⚕️ For Doctors" 
+            title={`👨‍⚕️ ${t.doctors.title}`}
             benefits={doctorBenefits}
             accentColor="bg-accent"
           />
