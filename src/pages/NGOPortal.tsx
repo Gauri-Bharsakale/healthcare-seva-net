@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Building2, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import sevaLogo from "@/assets/seva-logo-white.png";
+import sevaLogo from "@/assets/seva-logo-teal.png";
 
 const NGOPortal = () => {
   const [formData, setFormData] = useState({

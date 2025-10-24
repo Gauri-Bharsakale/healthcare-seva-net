@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Heart, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import sevaLogo from "@/assets/seva-logo-white.png";
+import sevaLogo from "@/assets/seva-logo-teal.png";
 
 const PatientPortal = () => {
   const [formData, setFormData] = useState({

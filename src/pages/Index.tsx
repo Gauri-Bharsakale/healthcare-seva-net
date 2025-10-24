@@ -6,7 +6,7 @@ import BenefitsSection from "@/components/BenefitsSection";
 import ImpactTracker from "@/components/ImpactTracker";
 import Footer from "@/components/Footer";
 import LanguageToggle from "@/components/LanguageToggle";
-import sevaLogo from "@/assets/seva-logo-white.png";
+import sevaLogo from "@/assets/seva-logo-teal.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 
