@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Heart, Upload } from "lucide-react";
+import { ArrowLeft, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import sevaLogo from "@/assets/seva-logo-teal.png";
@@ -13,21 +13,23 @@ import sevaLogo from "@/assets/seva-logo-teal.png";
 const PatientPortal = () => {
   const [formData, setFormData] = useState({
     name: "",
-    age: "",
-    gender: "",
-    city: "",
-    village: "",
-    state: "",
+    email: "",
     phone: "",
-    language: "",
-    healthIssue: "",
-    medicalReports: null as File | null,
-    prescription: null as File | null
+    password: "",
+    confirmPassword: "",
+    gender: "",
+    age: "",
+    city: "",
+    bio: ""
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Request submitted! We're finding the best doctors and NGOs to help you.");
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match!");
+      return;
+    }
+    toast.success("Account created successfully! Welcome to SevaHealth.");
   };
 
   return (
@@ -48,7 +50,7 @@ const PatientPortal = () => {
             </div>
             <CardTitle className="text-3xl">Patient Registration</CardTitle>
             <CardDescription className="text-base">
-              Get connected with verified doctors and NGOs for free or affordable healthcare
+              Join our community to access free or affordable healthcare services
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -66,13 +68,49 @@ const PatientPortal = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="age">Age *</Label>
+                  <Label htmlFor="email">Email Address *</Label>
                   <Input
-                    id="age"
-                    type="number"
-                    placeholder="25"
-                    value={formData.age}
-                    onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                    id="email"
+                    type="email"
+                    placeholder="your@email.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Phone Number *</Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder="+91 XXXXX XXXXX"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password *</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="Create a password"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm Password *</Label>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    placeholder="Confirm your password"
+                    value={formData.confirmPassword}
+                    onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                     required
                   />
                 </div>
@@ -95,7 +133,19 @@ const PatientPortal = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="city">City *</Label>
+                  <Label htmlFor="age">Age *</Label>
+                  <Input
+                    id="age"
+                    type="number"
+                    placeholder="25"
+                    value={formData.age}
+                    onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="city">City / Location *</Label>
                   <Input
                     id="city"
                     placeholder="Your City"
@@ -104,108 +154,21 @@ const PatientPortal = () => {
                     required
                   />
                 </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="village">Village (Optional)</Label>
-                  <Input
-                    id="village"
-                    placeholder="Village name"
-                    value={formData.village}
-                    onChange={(e) => setFormData({ ...formData, village: e.target.value })}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="state">State *</Label>
-                  <Input
-                    id="state"
-                    placeholder="Your State"
-                    value={formData.state}
-                    onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Contact Number *</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="+91 XXXXX XXXXX"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="language">Language Preference *</Label>
-                  <Select
-                    value={formData.language}
-                    onValueChange={(value) => setFormData({ ...formData, language: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select language" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="english">English</SelectItem>
-                      <SelectItem value="hindi">Hindi</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="healthIssue">Description of Health Issue *</Label>
+                <Label htmlFor="bio">How would you like to contribute? (Optional)</Label>
                 <Textarea
-                  id="healthIssue"
-                  placeholder="Please describe your health concern in detail..."
-                  value={formData.healthIssue}
-                  onChange={(e) => setFormData({ ...formData, healthIssue: e.target.value })}
-                  rows={4}
-                  required
+                  id="bio"
+                  placeholder="Tell us a bit about yourself or how you'd like to help..."
+                  value={formData.bio}
+                  onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                  rows={3}
                 />
               </div>
 
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="medicalReports">Upload Previous Medical Reports (Images / PDFs)</Label>
-                  <div className="flex items-center gap-2">
-                    <Input
-                      id="medicalReports"
-                      type="file"
-                      accept="image/*,application/pdf"
-                      onChange={(e) => setFormData({ ...formData, medicalReports: e.target.files?.[0] || null })}
-                    />
-                    <Upload className="w-5 h-5 text-muted-foreground" />
-                  </div>
-                  <p className="text-xs text-muted-foreground">For diagnosis reference</p>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="prescription">Upload Current Prescription or Doctor Note (Optional)</Label>
-                  <div className="flex items-center gap-2">
-                    <Input
-                      id="prescription"
-                      type="file"
-                      accept="image/*,application/pdf"
-                      onChange={(e) => setFormData({ ...formData, prescription: e.target.files?.[0] || null })}
-                    />
-                    <Upload className="w-5 h-5 text-muted-foreground" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-muted/50 p-4 rounded-lg border border-border/50">
-                <p className="text-sm text-muted-foreground">
-                  <strong>Note:</strong> All consultations are confidential. We'll connect you with verified doctors 
-                  and NGOs in your area who can provide free or low-cost medical assistance. You may also be eligible 
-                  for financial aid programs.
-                </p>
-              </div>
-
               <Button type="submit" className="w-full" size="lg">
-                Submit Request for Help
+                Create Account
               </Button>
             </form>
           </CardContent>
