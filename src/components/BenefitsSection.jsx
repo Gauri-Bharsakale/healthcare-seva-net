@@ -1,18 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from "lucide-react";
 
-interface Benefit {
-  title: string;
-  description: string;
-}
-
-interface BenefitsSectionProps {
-  title: string;
-  benefits: Benefit[];
-  accentColor?: string;
-}
-
-const BenefitsSection = ({ title, benefits, accentColor = "bg-primary" }: BenefitsSectionProps) => {
+const BenefitsSection = ({ title, benefits, accentColor = "bg-primary" }) => {
   return (
     <div className="mb-12">
       <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6 text-center">
