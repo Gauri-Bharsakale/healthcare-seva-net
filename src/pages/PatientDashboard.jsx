@@ -40,9 +40,9 @@ const PatientDashboard = () => {
               <AvatarImage src="" />
               <AvatarFallback>PT</AvatarFallback>
             </Avatar>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="rounded-full"
               onClick={() => navigate("/")}
             >

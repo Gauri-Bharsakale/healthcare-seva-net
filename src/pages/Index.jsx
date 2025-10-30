@@ -10,7 +10,6 @@ import sevaLogo from "@/assets/seva-logo-teal.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 
-
 const Index = () => {
   const { language } = useLanguage();
   const t = translations[language];
@@ -22,8 +21,8 @@ const Index = () => {
           <img src={sevaLogo} alt="SevaHealth" className="h-12" />
           <div className="flex items-center gap-4">
             <LanguageToggle />
-            <a 
-              href="/auth" 
+            <a
+              href="/auth"
               className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2 rounded-full font-medium shadow-soft transition-smooth"
             >
               {t.common.login}
@@ -36,7 +35,7 @@ const Index = () => {
       <About />
       <HowItWorks />
       <UserCategories />
-      
+
       <section className="py-20 gradient-subtle">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -47,20 +46,20 @@ const Index = () => {
               {t.benefits.subtitle}
             </p>
           </div>
-          
-          <BenefitsSection 
+
+          <BenefitsSection
             title={t.benefits.patients.title}
             benefits={t.benefits.patients.items}
             accentColor="bg-primary"
           />
-          
-          <BenefitsSection 
+
+          <BenefitsSection
             title={t.benefits.ngos.title}
             benefits={t.benefits.ngos.items}
             accentColor="bg-secondary"
           />
-          
-          <BenefitsSection 
+
+          <BenefitsSection
             title={t.benefits.doctors.title}
             benefits={t.benefits.doctors.items}
             accentColor="bg-accent"

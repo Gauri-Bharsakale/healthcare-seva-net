@@ -34,9 +34,9 @@ const DoctorDashboard = () => {
               <AvatarImage src="" />
               <AvatarFallback>DR</AvatarFallback>
             </Avatar>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="rounded-full"
               onClick={() => navigate("/")}
             >

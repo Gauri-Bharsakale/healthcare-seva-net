@@ -4,7 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Bell, LogOut, Search, Edit, Trash2, UserCircle, BarChart3, MessageSquare, Users } from "lucide-react";
+import {
+  Bell,
+  LogOut,
+  Search,
+  Edit,
+  Trash2,
+  UserCircle,
+  BarChart3,
+  MessageSquare,
+  Users
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 
@@ -41,9 +51,9 @@ const NGODashboard = () => {
               <AvatarImage src="" />
               <AvatarFallback>NGO</AvatarFallback>
             </Avatar>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="rounded-full"
               onClick={() => navigate("/")}
             >
@@ -102,7 +112,11 @@ const NGODashboard = () => {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground mb-2">Description</p>
-                  <p className="text-sm">Dedicated to providing accessible healthcare services to underserved rural communities across Maharashtra. We organize medical camps, health awareness programs, and collaborate with doctors for free consultations.</p>
+                  <p className="text-sm">
+                    Dedicated to providing accessible healthcare services to underserved rural communities
+                    across Maharashtra. We organize medical camps, health awareness programs, and collaborate
+                    with doctors for free consultations.
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -185,7 +199,7 @@ const NGODashboard = () => {
             </Card>
           </TabsContent>
 
-          {/* Connect with Doctors */}
+          {/* Doctors Section */}
           <TabsContent value="doctors" className="space-y-6">
             <div className="flex gap-4">
               <div className="relative flex-1">
@@ -239,7 +253,10 @@ const NGODashboard = () => {
               <CardContent>
                 <div className="space-y-4">
                   {mockPatients.map((patient) => (
-                    <div key={patient.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-smooth">
+                    <div
+                      key={patient.id}
+                      className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-smooth"
+                    >
                       <div className="flex items-center gap-4">
                         <Avatar>
                           <AvatarFallback>{patient.name.charAt(0)}</AvatarFallback>
@@ -250,14 +267,20 @@ const NGODashboard = () => {
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className={`text-xs px-3 py-1 rounded-full ${
-                          patient.status === 'Approved' ? 'bg-primary/10 text-primary' :
-                          patient.status === 'Pending' ? 'bg-yellow-100 text-yellow-700' :
-                          'bg-muted text-muted-foreground'
-                        }`}>
+                        <span
+                          className={`text-xs px-3 py-1 rounded-full ${
+                            patient.status === "Approved"
+                              ? "bg-primary/10 text-primary"
+                              : patient.status === "Pending"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : "bg-muted text-muted-foreground"
+                          }`}
+                        >
                           {patient.status}
                         </span>
-                        <Button size="sm" className="rounded-full">View Details</Button>
+                        <Button size="sm" className="rounded-full">
+                          View Details
+                        </Button>
                       </div>
                     </div>
                   ))}
@@ -276,7 +299,10 @@ const NGODashboard = () => {
               <CardContent>
                 <div className="space-y-4">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="flex items-start gap-4 p-4 rounded-lg border hover:bg-muted/50 cursor-pointer transition-smooth">
+                    <div
+                      key={i}
+                      className="flex items-start gap-4 p-4 rounded-lg border hover:bg-muted/50 cursor-pointer transition-smooth"
+                    >
                       <Avatar>
                         <AvatarFallback>M{i}</AvatarFallback>
                       </Avatar>
@@ -285,7 +311,9 @@ const NGODashboard = () => {
                           <p className="font-medium">Conversation {i}</p>
                           <p className="text-xs text-muted-foreground">1h ago</p>
                         </div>
-                        <p className="text-sm text-muted-foreground mt-1">Last message preview...</p>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Last message preview...
+                        </p>
                       </div>
                     </div>
                   ))}
