@@ -6,9 +6,14 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Stethoscope } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import sevaLogo from "@/assets/seva-logo-teal.png";
+
+// Firebase imports
+import { auth, db } from "../firebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 const DoctorPortal = () => {
   const [formData, setFormData] = useState({
@@ -23,13 +28,48 @@ const DoctorPortal = () => {
     bio: ""
   });
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-    toast.success("Account created successfully! Welcome to SevaHealth.");
+
+    try {
+      // Step 1: Create user in Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+
+      const user = userCredential.user;
+
+      // Step 2: Save extra details in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        role: "Doctor", // ✅ Added role field
+        uid: user.uid,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        gender: formData.gender,
+        age: formData.age,
+        city: formData.city,
+        bio: formData.bio,
+        createdAt: new Date(),
+      });
+
+      // Step 3: Success message + redirect
+      toast.success("Doctor account created successfully!");
+      setTimeout(() => navigate("/auth"), 2000);
+
+    } catch (error) {
+      console.error("Error during registration:", error);
+      toast.error(error.message);
+    }
   };
 
   return (

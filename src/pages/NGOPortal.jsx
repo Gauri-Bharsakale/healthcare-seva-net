@@ -1,43 +1,94 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Building2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import sevaLogo from "@/assets/seva-logo-teal.png";
 
+// Firebase imports
+import { auth, db } from "../firebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+
 const NGOPortal = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    ngoName: "",
     email: "",
     phone: "",
     password: "",
     confirmPassword: "",
-    gender: "",
-    age: "",
-    city: "",
-    bio: ""
+    location: "",
+    areaOfWork: "",
+    contactPerson: "",
+    registrationNo: "",
+    description: "",
   });
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  // Handle registration
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-    toast.success("Account created successfully! Welcome to SevaHealth.");
+
+    try {
+      // 1️⃣ Create user in Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+
+      const user = userCredential.user;
+
+      // 2️⃣ Save NGO data in Firestore inside "users" collection
+      await setDoc(doc(db, "users", user.uid), {
+        role: "NGO",
+        uid: user.uid,
+        ngoName: formData.ngoName,
+        email: formData.email,
+        phone: formData.phone,
+        location: formData.location,
+        areaOfWork: formData.areaOfWork,
+        contactPerson: formData.contactPerson,
+        registrationNo: formData.registrationNo,
+        description: formData.description,
+        createdAt: serverTimestamp(),
+      });
+
+      toast.success("✅ NGO account created successfully!");
+      toast.success("Redirecting to login...");
+      setTimeout(() => navigate("/auth"), 2000);
+    } catch (error) {
+      console.error("Error during registration:", error);
+      toast.error(error.message);
+    }
   };
 
+  // JSX for NGO Registration Form
   return (
     <div className="min-h-screen gradient-subtle py-12">
       <div className="container mx-auto px-4 max-w-3xl">
         <div className="flex items-center justify-between mb-6">
           <img src={sevaLogo} alt="SevaHealth Logo" className="h-12 w-12" />
-          <Link to="/" className="inline-flex items-center gap-2 text-primary hover:underline">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-primary hover:underline"
+          >
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
@@ -50,35 +101,43 @@ const NGOPortal = () => {
             </div>
             <CardTitle className="text-3xl">NGO Registration</CardTitle>
             <CardDescription className="text-base">
-              Join our community to help organize and support healthcare initiatives
+              Register your NGO to collaborate on healthcare initiatives
             </CardDescription>
           </CardHeader>
+
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* NGO Name */}
                 <div className="space-y-2">
-                  <Label htmlFor="name">Full Name *</Label>
+                  <Label htmlFor="ngoName">NGO Name *</Label>
                   <Input
-                    id="name"
-                    placeholder="Your Name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    id="ngoName"
+                    placeholder="Health for All NGO"
+                    value={formData.ngoName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, ngoName: e.target.value })
+                    }
                     required
                   />
                 </div>
 
+                {/* Email */}
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address *</Label>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder="ngo@email.com"
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
                     required
                   />
                 </div>
 
+                {/* Phone */}
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone Number *</Label>
                   <Input
@@ -86,11 +145,14 @@ const NGOPortal = () => {
                     type="tel"
                     placeholder="+91 XXXXX XXXXX"
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, phone: e.target.value })
+                    }
                     required
                   />
                 </div>
 
+                {/* Password */}
                 <div className="space-y-2">
                   <Label htmlFor="password">Password *</Label>
                   <Input
@@ -98,11 +160,14 @@ const NGOPortal = () => {
                     type="password"
                     placeholder="Create a password"
                     value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
                     required
                   />
                 </div>
 
+                {/* Confirm Password */}
                 <div className="space-y-2">
                   <Label htmlFor="confirmPassword">Confirm Password *</Label>
                   <Input
@@ -110,65 +175,99 @@ const NGOPortal = () => {
                     type="password"
                     placeholder="Confirm your password"
                     value={formData.confirmPassword}
-                    onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        confirmPassword: e.target.value,
+                      })
+                    }
                     required
                   />
                 </div>
 
+                {/* Location */}
                 <div className="space-y-2">
-                  <Label htmlFor="gender">Gender *</Label>
-                  <Select
-                    value={formData.gender}
-                    onValueChange={(value) => setFormData({ ...formData, gender: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select gender" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="age">Age *</Label>
+                  <Label htmlFor="location">Location *</Label>
                   <Input
-                    id="age"
-                    type="number"
-                    placeholder="25"
-                    value={formData.age}
-                    onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                    id="location"
+                    placeholder="Mumbai, Maharashtra"
+                    value={formData.location}
+                    onChange={(e) =>
+                      setFormData({ ...formData, location: e.target.value })
+                    }
                     required
                   />
                 </div>
 
+                {/* Area of Work */}
                 <div className="space-y-2">
-                  <Label htmlFor="city">City / Location *</Label>
+                  <Label htmlFor="areaOfWork">Area of Work *</Label>
                   <Input
-                    id="city"
-                    placeholder="Your City"
-                    value={formData.city}
-                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                    id="areaOfWork"
+                    placeholder="Rural Healthcare & Education"
+                    value={formData.areaOfWork}
+                    onChange={(e) =>
+                      setFormData({ ...formData, areaOfWork: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+
+                {/* Contact Person */}
+                <div className="space-y-2">
+                  <Label htmlFor="contactPerson">Contact Person *</Label>
+                  <Input
+                    id="contactPerson"
+                    placeholder="Dr. Anjali Verma"
+                    value={formData.contactPerson}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        contactPerson: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+
+                {/* Registration No */}
+                <div className="space-y-2">
+                  <Label htmlFor="registrationNo">Registration No *</Label>
+                  <Input
+                    id="registrationNo"
+                    placeholder="NGO/2020/12345"
+                    value={formData.registrationNo}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        registrationNo: e.target.value,
+                      })
+                    }
                     required
                   />
                 </div>
               </div>
 
+              {/* Description */}
               <div className="space-y-2">
-                <Label htmlFor="bio">How would you like to contribute? (Optional)</Label>
+                <Label htmlFor="description">Description *</Label>
                 <Textarea
-                  id="bio"
-                  placeholder="Tell us a bit about yourself or how you'd like to help..."
-                  value={formData.bio}
-                  onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                  id="description"
+                  placeholder="Describe your NGO's mission and activities..."
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      description: e.target.value,
+                    })
+                  }
                   rows={3}
+                  required
                 />
               </div>
 
               <Button type="submit" className="w-full" size="lg">
-                Create Account
+                Register NGO
               </Button>
             </form>
           </CardContent>

@@ -6,9 +6,14 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Heart } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import sevaLogo from "@/assets/seva-logo-teal.png";
+
+// firebase imports
+import { auth, db } from "../firebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 const PatientPortal = () => {
   const [formData, setFormData] = useState({
@@ -23,13 +28,50 @@ const PatientPortal = () => {
     bio: ""
   });
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-    toast.success("Account created successfully! Welcome to SevaHealth.");
+
+    try {
+      // Step 1: Create user in Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+
+      const user = userCredential.user;
+
+      // Step 2: Save extra details in Firestore
+        await setDoc(doc(db, "users", user.uid), {
+        role: "Patient", // ✅ Added role field
+        uid: user.uid,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        gender: formData.gender,
+        age: formData.age,
+        city: formData.city,
+        bio: formData.bio,
+        createdAt: new Date(),
+      });
+
+      // Step 3: Success and redirect
+      toast.success("Account created successfully! Redirecting to login...");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+
+    } catch (error) {
+      console.error("Error creating account:", error.message);
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -157,10 +199,10 @@ const PatientPortal = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="bio">How would you like to contribute? (Optional)</Label>
+                <Label htmlFor="bio">Describe your medical concern or needs (Optional)</Label>
                 <Textarea
                   id="bio"
-                  placeholder="Tell us a bit about yourself or how you'd like to help..."
+                  placeholder="Tell us a bit about yourself or what help you seek..."
                   value={formData.bio}
                   onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                   rows={3}
