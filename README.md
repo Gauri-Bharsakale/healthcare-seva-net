@@ -1,73 +1,71 @@
-# Welcome to your Lovable project
+# 🏥 CareConnect - Unified Health Management System
 
-## Project info
+CareConnect is a unified healthcare management web application built using **React** and **Firebase**.  
+It connects **Doctors**, **Patients**, and **NGOs** on one platform for efficient medical record management, communication, and service coordination.
 
-**URL**: https://lovable.dev/projects/7e0960eb-5254-457c-a9be-7469a113ecdd
+---
 
-## How can I edit this code?
+## 🚀 Features
 
-There are several ways of editing your application.
+- 👨‍⚕️ **Doctor Portal:** Register, manage patient records, and view appointments.  
+- 🧑‍🤝‍🧑 **Patient Portal:** Register, access your profile, and connect with doctors.  
+- 🏢 **NGO Portal:** Manage organization info, outreach activities, and patient support.  
+- 🔐 **Firebase Authentication:** Secure login and registration using Firebase Auth.  
+- ☁️ **Firestore Database:** Stores user data with unique document IDs.  
+- ⚙️ **Role-Based Access Control:** Each user (Doctor, Patient, NGO) is identified by a `role` key in Firestore.  
+- 🖼️ **Responsive UI:** Built with React and Tailwind for a clean and mobile-friendly design.
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/7e0960eb-5254-457c-a9be-7469a113ecdd) and start prompting.
+## 🧩 Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Frontend:** React.js  
+- **Backend:** Firebase Authentication + Firestore Database  
+- **Styling:** Tailwind CSS / Lucide React Icons  
+- **Hosting (optional):** Firebase Hosting or Vercel  
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 📂 Folder Structure
+healthcare-seva-net
+├── src/
+│ ├── components/
+│ │ ├── DoctorPortal.jsx
+│ │ ├── PatientPortal.jsx
+│ │ ├── NGOPortal.jsx
+│ │ ├── LoginPage.jsx
+│ │ └── Navbar.jsx
+│ │
+│ ├── firebase.js # Firebase configuration file
+│ ├── App.js # Main component with routing
+│ └── index.js # React entry point
+│
+├── public/
+│ └── index.html
+│
+└── package.json
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## 🧠 Firestore Structure
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+users (collection)
+├── <unique_user_id>
+│ ├── name: "John Doe"
+│ ├── email: "johndoe@gmail.com
+"
+│ ├── phone: "9999999999"
+│ ├── role: "doctor" | "patient" | "ngo"
+│ ├── location: "Mumbai"
+│ └── createdAt: Timestamp
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## ⚡ Installation Guide
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/7e0960eb-5254-457c-a9be-7469a113ecdd) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+1️⃣ **Clone the Repository**
+```bash
+git clone https://github.com/Gauri-Bharsakale/healthcare-seva-net.git
+cd healthcare-seva-net
+npm run dev 
