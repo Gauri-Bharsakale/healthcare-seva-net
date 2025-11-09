@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,22 +6,52 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Bell, LogOut, Search, Upload, FileText, UserCircle, Building2, MessageSquare } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { auth, db } from "../firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
 
 const PatientDashboard = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [userData, setUserData] = useState(null);
 
   const mockDoctors = [
     { id: 1, name: "Dr. Rajesh Kumar", specialization: "Cardiologist", experience: "15 years", city: "Mumbai", image: "" },
     { id: 2, name: "Dr. Priya Sharma", specialization: "Pediatrician", experience: "10 years", city: "Delhi", image: "" },
-    { id: 3, name: "Dr. Amit Patel", specialization: "General Physician", experience: "12 years", city: "Pune", image: "" }
+    { id: 3, name: "Dr. Amit Patel", specialization: "General Physician", experience: "12 years", city: "Pune", image: "" },
   ];
 
   const mockNGOs = [
     { id: 1, name: "Health for All", focus: "Primary Care", city: "Mumbai" },
     { id: 2, name: "Hope Foundation", focus: "Cancer Support", city: "Delhi" },
-    { id: 3, name: "Care India", focus: "Child Health", city: "Bangalore" }
+    { id: 3, name: "Care India", focus: "Child Health", city: "Bangalore" },
   ];
+
+  // ✅ Fetch Patient Details from Firestore
+  useEffect(() => {
+    const fetchPatientData = async () => {
+      try {
+        const user = auth.currentUser;
+        if (!user) {
+          console.error("No user logged in");
+          return;
+        }
+
+        // Get patient document by UID
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          setUserData(userSnap.data());
+        } else {
+          console.log("No patient data found!");
+        }
+      } catch (error) {
+        console.error("Error fetching patient data:", error);
+      }
+    };
+
+    fetchPatientData();
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -53,6 +83,30 @@ const PatientDashboard = () => {
       </header>
 
       <div className="container mx-auto px-4 py-8">
+        {/* ✅ Patient Info Section */}
+        {userData && (
+          <Card className="mb-8 shadow-card">
+            <CardHeader>
+              <CardTitle>Welcome, {userData.name || "Patient"}</CardTitle>
+              <CardDescription>Your personal health information</CardDescription>
+            </CardHeader>
+            <CardContent className="grid md:grid-cols-3 gap-4">
+              <div>
+                <p className="text-sm text-muted-foreground">Name</p>
+                <p className="font-medium">{userData.name || "Not provided"}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Age</p>
+                <p className="font-medium">{userData.age || "Not specified"}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Gender</p>
+                <p className="font-medium">{userData.gender || "Not specified"}</p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         <Tabs defaultValue="doctors" className="space-y-8">
           <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-3 rounded-full">
             <TabsTrigger value="doctors" className="rounded-full">Find Doctor</TabsTrigger>
@@ -152,12 +206,30 @@ const PatientDashboard = () => {
                 <CardDescription>Share your medical documents with doctors and NGOs</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="border-2 border-dashed border-primary/30 rounded-xl p-12 text-center hover:bg-primary/5 transition-smooth cursor-pointer">
-                  <Upload className="w-12 h-12 mx-auto text-primary mb-4" />
-                  <h3 className="font-semibold mb-2">Upload Report</h3>
-                  <p className="text-sm text-muted-foreground">Click to upload or drag and drop</p>
-                  <p className="text-xs text-muted-foreground mt-1">PDF, JPG, PNG (max 5MB)</p>
-                </div>
+                <div
+  className="border-2 border-dashed border-primary/30 rounded-xl p-12 text-center hover:bg-primary/5 transition-smooth cursor-pointer"
+  onClick={() => document.getElementById("fileInput").click()}
+>
+  <input
+    type="file"
+    id="fileInput"
+    accept=".pdf,.jpg,.png"
+    className="hidden"
+    onChange={(e) => {
+      const file = e.target.files[0];
+      if (file) {
+        alert(`Selected File: ${file.name}`);
+        console.log("Selected file:", file);
+      }
+    }}
+  />
+
+  <Upload className="w-12 h-12 mx-auto text-primary mb-4" />
+  <h3 className="font-semibold mb-2">Upload Report</h3>
+  <p className="text-sm text-muted-foreground">Click to upload or drag and drop</p>
+  <p className="text-xs text-muted-foreground mt-1">PDF, JPG, PNG (max 5MB)</p>
+</div>
+
 
                 <div>
                   <h3 className="font-semibold mb-4">Uploaded Reports</h3>
