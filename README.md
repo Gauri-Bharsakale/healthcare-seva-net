@@ -1,6 +1,6 @@
-# 🏥 CareConnect - Unified Health Management System
+# 🏥 SevaHealth - Unified Health Management System
 
-CareConnect is a unified healthcare management web application built using **React** and **Firebase**.  
+SevaHealth is a unified healthcare management web application built using **React** and **Firebase**.  
 It connects **Doctors**, **Patients**, and **NGOs** on one platform for efficient medical record management, communication, and service coordination.
 
 ---
@@ -22,7 +22,6 @@ It connects **Doctors**, **Patients**, and **NGOs** on one platform for efficien
 - **Frontend:** React.js  
 - **Backend:** Firebase Authentication + Firestore Database  
 - **Styling:** Tailwind CSS / Lucide React Icons  
-- **Hosting (optional):** Firebase Hosting or Vercel  
 
 ---
 
